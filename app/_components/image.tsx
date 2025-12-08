@@ -13,22 +13,23 @@ export const Analysis = () => {
     if (!image) return;
     setLoading(true);
 
-    const formData = new FormData();
-    formData.append("file", image);
-
     try {
-      const res = await fetch("https://huggingface.co/docs", {
+      const formData = new FormData();
+      formData.append("image", image);
+
+      const res = await fetch("/api/generate", {
         method: "POST",
-        headers: {
-          Authorization: "Bearer YOUR_HF_API_KEY",
-        },
         body: formData,
       });
-
       const data = await res.json();
 
-      const label = data?.[0]?.label || "naa cn ajillahgv";
-      setResult(label);
+      if (!data.objects || data.objects.length === 0) {
+        setResult("zla");
+        return;
+      }
+
+      const labels = data.objects.map((obj: { label: string }) => obj.label);
+      setResult(labels.join(", "));
     } catch (err) {
       console.error(err);
       setResult("zurag ajillahgv");
@@ -36,6 +37,8 @@ export const Analysis = () => {
       setLoading(false);
     }
   };
+  console.log("Selected image:", image);
+
   return (
     <div className="max-w-md mx-auto mt-7 flex flex-col gap-6 p-4 ">
       <div className="flex justify-between items-center">
@@ -43,7 +46,14 @@ export const Analysis = () => {
           <Gemini />
           <p className="font-black text-lg">Image analysis</p>
         </div>
-        <button className="w-12 h-12 border flex items-center justify-center cursor-pointer rounded-xl">
+        <button
+          className="w-12 h-12 border flex items-center justify-center cursor-pointer rounded-xl
+        "
+          onClick={() => {
+            setImage(null);
+            setResult(null);
+          }}
+        >
           <Refresh />
         </button>
       </div>
@@ -54,8 +64,8 @@ export const Analysis = () => {
         </p>
         <input
           type="file"
-          className="w-full h-10 border rounded-[10px] px-2"
-          accept="image"
+          className="w-full h-10 border rounded-[10px] px-2 cursor-pointer"
+          accept="image/*"
           onChange={(e) => setImage(e.target.files?.[0] || null)}
         />
         {image && (
@@ -74,7 +84,6 @@ export const Analysis = () => {
           </button>
         </div>
       </div>
-
       <div className="flex flex-col gap-2">
         <div className="flex gap-2 items-center">
           <Pepper />
