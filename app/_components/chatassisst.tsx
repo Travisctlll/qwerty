@@ -3,34 +3,41 @@ import { Chat } from "../icon/chat";
 import { Delete } from "../icon/delete";
 import { IoIosSend } from "react-icons/io";
 
+type ChatMessage = {
+  role: "user" | "assistant";
+  text: string;
+};
+
 export const Assisst = () => {
   const [click, setClick] = useState(false);
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSend = async () => {
     if (!message.trim()) return;
 
-    setMessages((prev) => [...prev, `You: ${message}`]);
-
-    const userMessage = message;
+    const userMessage = { role: "user", text: message };
+    setMessages((prev) => [...prev, userMessage]);
     setMessage("");
 
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat: userMessage }),
+        body: JSON.stringify({ chat: userMessage.text }),
       });
 
       if (!res.ok) throw new Error("Server error");
 
       const data = await res.json();
-      setMessages((prev) => [...prev, `AI: ${data.text}`]);
+      const aiMessage = { role: "assistant", text: data.text };
+      setMessages((prev) => [...prev, aiMessage]);
     } catch (err) {
-      console.error(err);
-      setMessages((prev) => [...prev, "AI: Failed to get response"]);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", text: "Failed to get response" },
+      ]);
     }
   };
 
@@ -59,9 +66,13 @@ export const Assisst = () => {
             {messages.map((msg, index) => (
               <div
                 key={index}
-                className="bg-gray-200 p-2 rounded-xl max-w-[80%] ml-auto"
+                className={`p-2 rounded-xl max-w-[80%] ${
+                  msg.role === "user"
+                    ? "bg-black text-white ml-auto"
+                    : "bg-gray-200 mr-auto"
+                }`}
               >
-                {msg}
+                {msg.text}
               </div>
             ))}
           </div>

@@ -1,13 +1,9 @@
 "use client";
-import { Anaheim } from "next/font/google";
-import Link from "next/link";
 import { useState } from "react";
 import { Analysis } from "./_components/image";
 import { Ingredient } from "./_components/ingredient";
-import { Chat } from "./icon/chat";
 import { Creator } from "./_components/creator";
 import { Assisst } from "./_components/chatassisst";
-
 export default function Home() {
   const [tab, setTab] = useState("Image analysis");
   return (

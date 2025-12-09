@@ -1,5 +1,5 @@
 {
-  "name": "assisstant",
+  "name": "assistant",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,7 +12,7 @@
     "@google/genai": "^1.31.0",
     "@google/generative-ai": "^0.24.1",
     "@huggingface/inference": "^4.13.4",
-    "next": "16.0.6",
+    "next": "16.0.7",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-icons": "^5.5.0"
@@ -23,7 +23,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.0.6",
+    "eslint-config-next": "16.0.7",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
