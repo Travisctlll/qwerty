@@ -24,7 +24,7 @@ export const Analysis = () => {
       const data = await res.json();
 
       if (!data.objects || data.objects.length === 0) {
-        setResult("zla");
+        setResult("error");
         return;
       }
 

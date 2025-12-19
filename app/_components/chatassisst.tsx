@@ -2,11 +2,7 @@ import { useState } from "react";
 import { Chat } from "../icon/chat";
 import { Delete } from "../icon/delete";
 import { IoIosSend } from "react-icons/io";
-
-type ChatMessage = {
-  role: "user" | "assistant";
-  text: string;
-};
+import { ChatMessage } from "../types/chat";
 
 export const Assisst = () => {
   const [click, setClick] = useState(false);
@@ -17,7 +13,7 @@ export const Assisst = () => {
   const handleSend = async () => {
     if (!message.trim()) return;
 
-    const userMessage = { role: "user", text: message };
+    const userMessage: ChatMessage = { role: "user", text: message };
     setMessages((prev) => [...prev, userMessage]);
     setMessage("");
 
@@ -31,7 +27,7 @@ export const Assisst = () => {
       if (!res.ok) throw new Error("Server error");
 
       const data = await res.json();
-      const aiMessage = { role: "assistant", text: data.text };
+      const aiMessage: ChatMessage = { role: "assistant", text: data.text };
       setMessages((prev) => [...prev, aiMessage]);
     } catch (err) {
       setMessages((prev) => [
